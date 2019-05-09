@@ -2,28 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace EtherRealm{
 public class DirectionalField : MonoBehaviour
 {
     // Start is called before the first frame update
+    public Vector3 speed = new Vector3(0,1,0);
+    public float strength = 1;
     void Start()
     {
         Debug.Log("Field Initialized");
     }
     // Update is called once per frame
-    void Update()
-    {
-        Debug.Log("Update");
+    public Vector4 GetFieldStrength(){
+        var fieldStrength = new Vector4(speed.x,speed.y,speed.z, strength);
+
+        return fieldStrength;
     }
-    public void OnCollisionEnter(Collision collision)
+    public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entered Collision");
+        Debug.Log("Entered Field");
+        Component target = other.GetComponent("EthericBody");
+        if (target != null){
+            ((EthericBody)target).AddField(this.gameObject);
+        }
     }
-    public void OnCollisionStay(Collision other)
+    public void OnTriggerExit(Collider other)
     {
-        Debug.Log("Stay");
+        Debug.Log("Exited Field");
+        Component target = other.GetComponent("EthericBody");
+        if (target != null){
+            ((EthericBody)target).DelField(this.gameObject);
+        }
     }
-    public void OnCollisionExit(Collision collision)
-    {
-        Debug.Log("Collision Exited");
-    }
+}
 }
