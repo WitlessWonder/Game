@@ -20,7 +20,7 @@ public class DirectionalField : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entered Field");
+        //Debug.Log("Entered Field");
         Component target = other.GetComponent("EthericBody");
         if (target != null){
             ((EthericBody)target).AddField(this.gameObject);
@@ -28,7 +28,7 @@ public class DirectionalField : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exited Field");
+        //Debug.Log("Exited Field");
         Component target = other.GetComponent("EthericBody");
         if (target != null){
             ((EthericBody)target).DelField(this.gameObject);

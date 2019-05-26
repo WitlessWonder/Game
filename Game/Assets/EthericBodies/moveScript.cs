@@ -6,10 +6,10 @@ public class moveScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public float speed = 1;
-
+    Rigidbody thisBody;
     void Start()
     {
-        
+        thisBody = (Rigidbody)this.gameObject.GetComponent("Rigidbody");
     }
 
     // Update is called once per frame
@@ -37,9 +37,15 @@ public class moveScript : MonoBehaviour
         else if (Input.GetKey(KeyCode.E)){
             z-=speed;
         }
-        Vector3 velocity = new Vector3(x,y,z);
-        this.transform.position += velocity*dT;
-
+        Vector3 dV = new Vector3(x,y,z);
+        if(dV== new Vector3()){
+           //Debug.Log("No Input Detected");
+        }
+        else{
+            Debug.Log("Input");
+            thisBody.velocity += dV*dT;
+            //Debug.Log(thisBody.velocity.ToString());
+        }
     }
     
 }
