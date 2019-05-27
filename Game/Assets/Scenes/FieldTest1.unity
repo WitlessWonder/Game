@@ -677,6 +677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ee2ec8bf7a89c49a924706d4467d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camSpeed: 10
+  panSpeed: 10
   mouseDisp: {fileID: 2027606845}
   Target: {fileID: 554501179}
 --- !u!1 &1312126179

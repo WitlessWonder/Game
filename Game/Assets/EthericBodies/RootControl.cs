@@ -19,8 +19,8 @@ namespace Control{
         //target.control
 
         // Start is called before the first frame update
-        public float camSpeed = .25f;
-        public float panSpeed = .1f;
+        public float camSpeed;
+        public float panSpeed;
         public UnityEngine.UI.Text mouseDisp;
         public GameObject Target;
         private ShipControl TargetController;
@@ -29,7 +29,7 @@ namespace Control{
         Vector3 OldThrust = new Vector3();
         //camlock, if locked will control camera only
         private bool CamLock = false;
-
+        int frame = 0;
         private Vector3 oldMouse;
         void Start()
         {
@@ -46,7 +46,6 @@ namespace Control{
         //Need to think of a general control scheme
         void Update()
         {
-            ShipThrustVector = new Vector3();
             Vector3 newMouse = new Vector3();
             newMouse.x = Input.mousePosition.x;
             newMouse.y = Input.mousePosition.y;
@@ -58,7 +57,7 @@ namespace Control{
             foreach(KeyCode kcode in System.Enum.GetValues(typeof(KeyCode)))
             {
                 if (Input.GetKeyUp(kcode)){
-                    Debug.Log("KeyCode up: " + kcode);
+                   // Debug.Log("KeyCode up: " + kcode);
                     
                     if(kcode == KeyCode.A){
                         ShipThrustVector.x=0;
@@ -88,7 +87,7 @@ namespace Control{
                 }
 
                 if(Input.GetKeyDown(kcode)){
-                    Debug.Log("KeyCode down: " + kcode);
+                    //Debug.Log("KeyCode down: " + kcode);
                     if(kcode == KeyCode.A){
                         ShipThrustVector.x+=-1f;
                     }
@@ -117,30 +116,38 @@ namespace Control{
                     
                 }
 
-                if (CamLock){
+                
+            }
+            Debug.Log(frame.ToString()+":    ThrustVector: "+ ShipThrustVector.ToString());
+            if (CamLock){
+                    mouseDisp.color = Color.red;
                     float dT = Time.deltaTime;
                     //camera controls
-                    Debug.Log("CamStep; "+ ShipThrustVector.ToString()); 
-                    this.transform.position += camSpeed * ShipThrustVector*dT;
-                    Quaternion camRotate = Quaternion.Euler(0,dMouse.x*panSpeed*dT,0);
-                    camRotate.Normalize();
-                    this.transform.rotation *= camRotate;
+                     
+                    Debug.Log((ShipThrustVector*dT*camSpeed).ToString());
+                    this.transform.position += ShipThrustVector*camSpeed*dT;
+                    Quaternion camRotateX = Quaternion.Euler(0, dMouse.x*panSpeed*dT,0);
+                    Quaternion camRotateY = Quaternion.Euler(dMouse.y*panSpeed*dT,0,0);
+                    this.transform.rotation *= camRotateX;
+                    this.transform.rotation *= camRotateY;
                 }
-                else if (ShipThrustVector!=OldThrust){
+            else {
+                mouseDisp.color=Color.black;
+                if (ShipThrustVector!=OldThrust){
 
                     //target controls, default ship target because i haven't generalized it yet
                     //eventually designed for player body and other controllable entities, and internal state changes
                     if(TargetController){
                         TargetController.Input(ShipThrustVector);
-                        Debug.Log("Input Detected: " + ShipThrustVector);
+                        //Debug.Log("Input Detected: " + ShipThrustVector);
                     }
                 }
+            }
 
 
                 //post loop stuff(update old states)
                 OldThrust = ShipThrustVector;
                 oldMouse = newMouse;
-            }
         }
     }
 }
